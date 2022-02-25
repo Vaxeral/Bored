@@ -6,6 +6,8 @@ from window import instance as window
 
 global_clock = pygame.time.Clock()
 
+#  TODO: Support preloading scenes
+
 class SceneManager:
 	def __init__(self):
 		self.scenes = []
