@@ -35,7 +35,7 @@ class Button:
 
 		assert self.w >= width and self.h >= height, "Text is bigger than button size !" #  Not sure if asserting is the right thing to do.  We could just let the text overflow.
 
-		#  Position of top left corner of text to be centered
+		#  Position of top left corner of text surface to be centered on button rect
 
 		x = self.x + self.w / 2 - width / 2
 		y = self.y + self.h / 2 - height / 2

@@ -60,13 +60,15 @@ class SceneManager:
 			last = self.scenes[-1]
 			if last.to_remove:
 				if last.name == self.scene_current.name:
-					self.scene_current = None
+					self.scene_current = None #  If the current scene is removed the user should set a new scene.
 				self.pop()
 			else:
 				break
-		if self.scene_switched and not self.scene_current.was_init:
-			self.scene_current.init()
+		if self.scene_switched:
+			if not self.scene_current.was_loaded:
+				self.scene_current.load()
 			self.scene_switched = False
+			self.scene_current.start()
 
 	def scene_switch(self, name):
 		assert len(self.scenes), "No scenes to switch to!"
@@ -88,14 +90,18 @@ class SceneManager:
 scene_manager = SceneManager()
 
 class Scene:
-	def __init__(self, name):
+	def __init__(self, name, *, preload=False):
 		self.manager = None
 		self.name = name
 		self.to_remove = False
-		self.was_init = False
+		self.was_loaded = False
+		self.preload = preload
 
-	def init(self):
-		self.was_init = True
+	def load(self):
+		self.was_loaded = True
+
+	def start(self):
+		pass
 
 	def handle_event(self, event):
 		pass
@@ -110,27 +116,41 @@ class Scene:
 		self.manager.scene_switch(name)
 
 class Menu(Scene):
-	#  Could pass in settings here for menu layout, user settings, ...
-	def __init__(self, name, message, background):
-		super().__init__(name)
+	#  Could pass in settings here for menu layout, user settings, ...  Maybe parse an xml file for menu layout?
+	def __init__(self, name, message, background, *, preload=False):
+		super().__init__(name, preload=preload)
 		self.message = message
 		self.background = background
+		if self.preload:
+			self.load()
+
+	def start(self):
+		window.fill = (0, 0, 0, 255)
+		print(f"{self.name} is starting!")
 		width, height = window.surface.get_size()
-		BUTTON_WIDTH = 80
+		BUTTON_WIDTH = 200
 		BUTTON_HEIGHT = 20
 		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
 		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
-		self.button = Button(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, global_font, "Hello Click Me", (0, 0, 0, 255), (255, 255, 255, 255), lambda button: button.set_text(message))
+		self.button.x = BUTTON_X
+		self.button.y = BUTTON_Y
+		self.button.w = BUTTON_WIDTH
+		self.button.h = BUTTON_HEIGHT
+		self.button.text = self.name
 
-	def init(self):
-		super().init()
-		window.fill = (0, 0, 0, 255)
-		print(self.message)
+	def load(self):
+		super().load()
+		width, height = window.surface.get_size()
+		BUTTON_WIDTH = 200
+		BUTTON_HEIGHT = 20
+		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
+		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
+		self.button = Button(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, global_font, "Hello Click Me", (0, 0, 0, 255), (255, 255, 255, 255), lambda button: button.set_text(f"Press M to go to {self.message}"))
 
 	def handle_event(self, event):
 		if event.type == KEYDOWN:
 			if event.key == K_m:
-				self.scene_switch("MainMenu")
+				self.scene_switch(self.message)
 		elif event.type == MOUSEBUTTONDOWN:
 			if event.button == 1:
 				self.button.update()
