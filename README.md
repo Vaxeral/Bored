@@ -21,3 +21,5 @@ Click it at your own risk.
 To switch scenes press the m key.
 
 You will notice that the text on the button might change.  Click it again to see what happens.
+
+The button reacts to wasd keys.

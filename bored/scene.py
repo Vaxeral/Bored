@@ -14,6 +14,7 @@ global_font = pygame.sysfont.SysFont(None, 12)
 
 #  TODO: Support preloading scenes
 #  TODO: Handle screen resizing such that UI and game respond to it
+#  NOTE: May not need layering effect for terraria clone.  Simple scene switching may be enough.
 
 class SceneManager:
 	def __init__(self):
@@ -109,6 +110,7 @@ class Scene:
 		self.manager.scene_switch(name)
 
 class Menu(Scene):
+	#  Could pass in settings here for menu layout, user settings, ...
 	def __init__(self, name, message, background):
 		super().__init__(name)
 		self.message = message
@@ -134,7 +136,16 @@ class Menu(Scene):
 				self.button.update()
 
 	def update(self, dt):
-		pass
+		keys = pygame.key.get_pressed()
+
+		if keys[K_w]:
+			self.button.y -= 1 * dt
+		if keys[K_a]:
+			self.button.x -= 1 * dt
+		if keys[K_s]:
+			self.button.y += 1 * dt
+		if keys[K_d]:
+			self.button.x += 1 * dt
 
 	def render(self):
 		width, height = window.surface.get_size()

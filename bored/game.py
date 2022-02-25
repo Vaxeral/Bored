@@ -37,7 +37,7 @@ class Game:
 		if event.type == QUIT:
 			self.is_running = False
 		elif event.type == KEYDOWN:
-			if event.key == K_a:
+			if event.key == K_F1:
 				if window.fullscreen:
 					info = pygame.display.Info()
 					pygame.display.set_mode((640, 480), RESIZABLE)
