@@ -20,7 +20,6 @@ class Button:
 		x, y = pygame.mouse.get_pos()
 		rect = pygame.Rect(self.x, self.y, self.w, self.h)
 		if rect.collidepoint(x, y):
-			print("update")
 			self.callback(self)
 
 	def render(self):
@@ -45,3 +44,4 @@ class Button:
 
 	def set_text(self, text):
 		self.text = text
+
