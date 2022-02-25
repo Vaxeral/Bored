@@ -116,7 +116,7 @@ class Menu(Scene):
 		BUTTON_HEIGHT = 20
 		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
 		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
-		self.button = Button(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, global_font, "Hello Click Me", (0, 0, 0, 255), (255, 255, 255, 255), lambda button: button.set_text("That Tickles"))
+		self.button = Button(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, global_font, "Hello Click Me", (0, 0, 0, 255), (255, 255, 255, 255), lambda button: button.set_text(message))
 
 	def init(self):
 		super().init()
