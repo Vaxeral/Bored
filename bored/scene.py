@@ -10,6 +10,7 @@ class SceneManager:
 	def __init__(self):
 		self.scenes = []
 		self.scene_current = None
+		self.scene_switched = False
 
 	def scene_push(self, scene):
 		names = [scene.name for scene in self.scenes]
@@ -18,14 +19,14 @@ class SceneManager:
 		scene.manager = self
 		self.scenes.append(scene)
 		self.scene_current = self.scenes[-1]
-		self.scene_current.init()
+		self.scene_switched = True
 
 	def scene_pop(self):
 		last = self.scenes.pop()
 
 		if len(self.scenes):
 			self.scene_current = self.scenes[-1]
-			self.scene_current.init()
+			self.scene_switched = True
 		else:
 			self.scene_current = None
 		return last
@@ -53,6 +54,9 @@ class SceneManager:
 				self.pop()
 			else:
 				break
+		if self.scene_switched:
+			self.scene_current.init()
+			self.scene_switched = False
 
 	def scene_switch(self, name):
 		assert len(self.scenes), "No scenes to switch to!"
@@ -66,7 +70,7 @@ class SceneManager:
 		self.scenes[-1] = self.scenes[index]
 		self.scenes[index] = temp
 		self.scene_current = self.scenes[-1]
-		self.scene_current.init()
+		self.scene_switched = True
 
 	def scene_current_run(self, func_name, *agrs):
 		if self.scene_current and hasattr(self.scene_current, func_name): getattr(self.scene_current, func_name)(*agrs)
@@ -95,9 +99,13 @@ class Scene:
 		self.manager.scene_switch(name)
 
 class Menu(Scene):
+	def __init__(self, name, message):
+		super().__init__(name)
+		self.message = message
+
 	def init(self):
 		window.fill = (0, 0, 0, 255)
-		print("Initializing Menu Scene")
+		print(self.message)
 
 	def handle_event(self, event):
 		if event.type == KEYDOWN:

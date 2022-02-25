@@ -16,7 +16,8 @@ from scene import Scene, Menu, scene_manager, global_clock
 class Game:
 	def __init__(self):
 		self.is_running = False
-		scene_manager.scene_push(Menu("MainMenu"))
+		scene_manager.scene_push(Menu("MainMenu", "MainMenu"))
+		scene_manager.scene_push(Menu("FoggyBottom", "FoggyBottom"))
 
 	#  This is a empty method for now.  We will update our game objects here, such as the Player, Camera and other things.
 	def update(self, dt):
