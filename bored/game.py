@@ -13,7 +13,7 @@ from pygame.locals import *
 from window import instance as window
 from scene import Scene, Menu, scene_manager, global_clock
 
-birds = pygame.image.load("./resources/birds.jpg")
+birds = pygame.image.load("./resources/birds.jpg") #  Do these paths work on windows?
 bird = pygame.image.load("./resources/bird.jpg")
 
 class Game:

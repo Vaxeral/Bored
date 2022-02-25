@@ -10,10 +10,11 @@ global_clock = pygame.time.Clock()
 
 pygame.font.init()
 
-global_font = pygame.sysfont.SysFont(None, 12)
+global_font = pygame.sysfont.SysFont(None, 18)
 
 #  TODO: Support preloading scenes
 #  TODO: Handle screen resizing such that UI and game respond to it
+#  TODO: Load Menu layout from xml files
 #  NOTE: May not need layering effect for terraria clone.  Simple scene switching may be enough.
 
 class SceneManager:
@@ -128,7 +129,7 @@ class Menu(Scene):
 		window.fill = (0, 0, 0, 255)
 		print(f"{self.name} is starting!")
 		width, height = window.surface.get_size()
-		BUTTON_WIDTH = 200
+		BUTTON_WIDTH = 250
 		BUTTON_HEIGHT = 20
 		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
 		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
@@ -141,7 +142,7 @@ class Menu(Scene):
 	def load(self):
 		super().load()
 		width, height = window.surface.get_size()
-		BUTTON_WIDTH = 200
+		BUTTON_WIDTH = 250
 		BUTTON_HEIGHT = 20
 		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
 		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2

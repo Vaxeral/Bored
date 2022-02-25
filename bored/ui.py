@@ -24,7 +24,7 @@ class Button:
 
 	def render(self):
 		#  Renders black text on a white rectangle
-		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(self.x, self.y, self.w, self.h))
+		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(self.x, self.y, self.w, self.h), border_radius=10)
 
 		ANTIALIAS = True #  Makes the text look good
 
