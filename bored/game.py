@@ -13,11 +13,14 @@ from pygame.locals import *
 from window import instance as window
 from scene import Scene, Menu, scene_manager, global_clock
 
+birds = pygame.image.load("./resources/birds.jpg")
+bird = pygame.image.load("./resources/bird.jpg")
+
 class Game:
 	def __init__(self):
 		self.is_running = False
-		scene_manager.scene_push(Menu("MainMenu", "MainMenu"))
-		scene_manager.scene_push(Menu("FoggyBottom", "FoggyBottom"))
+		scene_manager.scene_push(Menu("MainMenu", "MainMenu", bird))
+		scene_manager.scene_push(Menu("FoggyBottom", "FoggyBottom", birds))
 
 	#  This is a empty method for now.  We will update our game objects here, such as the Player, Camera and other things.
 	def update(self, dt):

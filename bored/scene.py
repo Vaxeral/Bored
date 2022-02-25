@@ -109,9 +109,10 @@ class Scene:
 		self.manager.scene_switch(name)
 
 class Menu(Scene):
-	def __init__(self, name, message):
+	def __init__(self, name, message, background):
 		super().__init__(name)
 		self.message = message
+		self.background = background
 		width, height = window.surface.get_size()
 		BUTTON_WIDTH = 80
 		BUTTON_HEIGHT = 20
@@ -136,6 +137,8 @@ class Menu(Scene):
 		pass
 
 	def render(self):
-		self.button.render()
 		width, height = window.surface.get_size()
+		self.background = pygame.transform.scale(self.background, (width, height))
+		window.surface.blit(self.background, (0, 0))
 		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(0, 0, width, 10))
+		self.button.render()
