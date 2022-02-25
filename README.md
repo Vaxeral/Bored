@@ -4,4 +4,4 @@ This will become a terraria clone.  Right now its just a demo showcasing my Scen
 
 # Run
 
-Run the code by entering the projects root directory and running python /bored/main.py
+Run the code by entering the projects root directory and running python bored/main.py
