@@ -56,7 +56,7 @@ class SceneManager:
 				self.pop()
 			else:
 				break
-		if self.scene_switched:
+		if self.scene_switched and not self.scene_current.was_init:
 			self.scene_current.init()
 			self.scene_switched = False
 
@@ -84,9 +84,10 @@ class Scene:
 		self.manager = None
 		self.name = name
 		self.to_remove = False
+		self.was_init = False
 
 	def init(self):
-		pass
+		self.was_init = True
 
 	def handle_event(self, event):
 		pass
@@ -106,15 +107,14 @@ class Menu(Scene):
 		self.message = message
 
 	def init(self):
+		super().init()
 		window.fill = (0, 0, 0, 255)
 		print(self.message)
 
 	def handle_event(self, event):
 		if event.type == KEYDOWN:
 			if event.key == K_m:
-				scene_manager.scene_pop()
-			elif event.key == K_p:
-				print("Hello from main scene!")
+				self.scene_switch("MainMenu")
 
 	def update(self, dt):
 		pass
