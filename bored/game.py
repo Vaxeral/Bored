@@ -25,7 +25,7 @@ class Game:
 	def render(self):
 		window.surface.fill(window.fill)
 		
-		scene_manager.scene_current_run("render")
+		scene_manager.scene_all_run("render")
 
 		pygame.display.update()
 

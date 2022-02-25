@@ -18,6 +18,8 @@ global_font = pygame.sysfont.SysFont(None, 18)
 #  TODO: Handle screen resizing such that UI and game respond to it
 #  TODO: Load Menu layout from xml files
 #  NOTE: May not need layering effect for terraria clone.  Simple scene switching may be enough.
+#  TODO: Fat Pointer Class for Chunks.  
+#        Only store chunk data ie 2d dimensional list and only access the chunk data through the Chunk object.
 
 class SceneManager:
 	def __init__(self):
@@ -87,8 +89,13 @@ class SceneManager:
 		self.scene_current = self.scenes[-1]
 		self.scene_switched = True
 
-	def scene_current_run(self, func_name, *agrs):
-		if self.scene_current and hasattr(self.scene_current, func_name): getattr(self.scene_current, func_name)(*agrs)
+	def scene_current_run(self, func_name, *args):
+		if self.scene_current and hasattr(self.scene_current, func_name): getattr(self.scene_current, func_name)(*args)
+
+	def scene_all_run(self, func_name, *args):
+		for scene in self.scenes:
+			if hasattr(scene, func_name): getattr(scene, func_name)(*args)
+
 
 scene_manager = SceneManager()
 
@@ -140,7 +147,7 @@ class MenuScene(Scene):
 		self.button_play = Button( \
 			BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, \
 			global_font, "Play", (0, 0, 0, 255), (255, 255, 255, 255), \
-			lambda button: scene_manager.scene_push(GameScene("Game")))
+			lambda button: (scene_manager.scene_pop(), scene_manager.scene_push(GameScene("Game"))))
 
 		self.button_quit = Button( \
 			BUTTON_X, BUTTON_Y + BUTTON_HEIGHT * 2, BUTTON_WIDTH, BUTTON_HEIGHT, \
