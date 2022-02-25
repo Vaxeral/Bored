@@ -21,7 +21,6 @@ class Game:
 	#  This is a empty method for now.  We will update our game objects here, such as the Player, Camera and other things.
 	def update(self, dt):
 		scene_manager.scene_current_run("update", dt)
-		pass
 
 	def render(self):
 		window.surface.fill(window.fill)

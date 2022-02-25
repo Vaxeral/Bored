@@ -61,7 +61,7 @@ class SceneManager:
 			if scene.name == name:
 				index = i
 				break
-		assert index, "Scene {name} was not found!"
+		assert index is not None, "Scene {name} was not found!"
 		temp = self.scenes[-1]
 		self.scenes[-1] = self.scenes[index]
 		self.scenes[index] = temp
