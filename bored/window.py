@@ -9,7 +9,7 @@ class Window:
 		info = pygame.display.Info()
 
 		#  "or" together flags ie SCALED, RESIZABLE, and others with | operator.  SCALED fixes stuff with fullscreen but does other stuff idk about
-		pygame.display.set_mode((info.current_w, info.current_h), RESIZABLE) #  SCALED cuases issues when trying to resize.
+		pygame.display.set_mode((640, 480), RESIZABLE) #  SCALED cuases issues when trying to resize.
 		pygame.display.set_caption("Bored")
 
 		#  The icon is relative to the projects root directory.  Which means for it to load the image the game must be ran from the root of the project.

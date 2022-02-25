@@ -37,7 +37,7 @@ class Game:
 			if event.key == K_a:
 				if window.fullscreen:
 					info = pygame.display.Info()
-					pygame.display.set_mode((info.current_w, info.current_h), RESIZABLE)
+					pygame.display.set_mode((640, 480), RESIZABLE)
 					window.fullscreen = False
 				else:
 					window.fullscreen = True
