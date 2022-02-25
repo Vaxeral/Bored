@@ -188,3 +188,4 @@ class GameScene(Scene):
 
 	def render(self):
 		self.player.render()
+
