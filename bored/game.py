@@ -11,8 +11,7 @@ from pygame.locals import *
 #  This imports the object instance from window module and renames it to window
 #  This is our global window object used to blit images to the screen
 from window import instance as window
-
-global_clock = pygame.time.Clock()
+from scene import Scene, global_clock
 
 class Game:
 	def __init__(self):
