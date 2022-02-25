@@ -11,16 +11,12 @@ from pygame.locals import *
 #  This imports the object instance from window module and renames it to window
 #  This is our global window object used to blit images to the screen
 from window import instance as window
-from scene import Scene, Menu, scene_manager, global_clock
-
-birds = pygame.image.load("./resources/birds.jpg") #  Do these paths work on windows?
-bird = pygame.image.load("./resources/bird.jpg")
+from scene import Scene, MenuScene, GameScene, scene_manager, global_clock
 
 class Game:
 	def __init__(self):
 		self.is_running = False
-		scene_manager.scene_push(Menu("MainMenu", "FoggyBottom", bird, preload=True))
-		scene_manager.scene_push(Menu("FoggyBottom", "MainMenu", birds))
+		scene_manager.scene_push(MenuScene("MainMenu"))
 
 	#  This is a empty method for now.  We will update our game objects here, such as the Player, Camera and other things.
 	def update(self, dt):
@@ -59,6 +55,10 @@ class Game:
 
 			#  This returns the time the last frame took to execute.  Passing 60 will delay the main loop to keep a constant frame rate of 60.
 			dt = global_clock.tick(60) 
+
+			if scene_manager.scene_current is None:
+				self.is_running = False
+				break
 
 			#  We pass in dt or delta time to update all our objects positions scaled by the delta time.  
 			#  This ensures that objects move at the same rate no matter how fast the main loop ran or in other words how fast your computer is.

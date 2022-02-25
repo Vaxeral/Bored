@@ -6,6 +6,8 @@ from window import instance as window
 
 from ui import Button
 
+from player import Player
+
 global_clock = pygame.time.Clock()
 
 pygame.font.init()
@@ -27,7 +29,6 @@ class SceneManager:
 		names = [scene.name for scene in self.scenes]
 		assert scene.name not in names, "Scene with name, {scene.name}, already exists."
 
-		scene.manager = self
 		self.scenes.append(scene)
 		self.scene_current = self.scenes[-1]
 		self.scene_switched = True
@@ -72,13 +73,14 @@ class SceneManager:
 			self.scene_current.start()
 
 	def scene_switch(self, name):
-		assert len(self.scenes), "No scenes to switch to!"
+		assert len(self.scenes) > 1, "No scenes to switch to!"
 		index = None
+		print(name)
 		for i, scene in enumerate(self.scenes):
 			if scene.name == name:
 				index = i
 				break
-		assert index is not None, "Scene {name} was not found!"
+		assert index is not None, f"Scene {name} was not found!"
 		temp = self.scenes[-1]
 		self.scenes[-1] = self.scenes[index]
 		self.scenes[index] = temp
@@ -92,7 +94,6 @@ scene_manager = SceneManager()
 
 class Scene:
 	def __init__(self, name, *, preload=False):
-		self.manager = None
 		self.name = name
 		self.to_remove = False
 		self.was_loaded = False
@@ -113,64 +114,77 @@ class Scene:
 	def render(sefl):
 		pass
 
-	def scene_switch(self, name):
-		self.manager.scene_switch(name)
-
-class Menu(Scene):
+class MenuScene(Scene):
 	#  Could pass in settings here for menu layout, user settings, ...  Maybe parse an xml file for menu layout?
-	def __init__(self, name, message, background, *, preload=False):
-		super().__init__(name, preload=preload)
-		self.message = message
-		self.background = background
+	def __init__(self, name):
+		super().__init__(name, preload=True)
 		if self.preload:
 			self.load()
 
 	def start(self):
-		window.fill = (0, 0, 0, 255)
-		print(f"{self.name} is starting!")
-		width, height = window.surface.get_size()
-		BUTTON_WIDTH = 250
-		BUTTON_HEIGHT = 20
-		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
-		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
-		self.button.x = BUTTON_X
-		self.button.y = BUTTON_Y
-		self.button.w = BUTTON_WIDTH
-		self.button.h = BUTTON_HEIGHT
-		self.button.text = self.name
+		pass
 
 	def load(self):
 		super().load()
+
+		self.birds = pygame.image.load("./resources/birds.jpg") #  Do these paths work on windows?
+		self.bird = pygame.image.load("./resources/bird.jpg")
+
+		self.background = self.bird
+
 		width, height = window.surface.get_size()
 		BUTTON_WIDTH = 250
 		BUTTON_HEIGHT = 20
 		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
 		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
-		self.button = Button(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, global_font, "Hello Click Me", (0, 0, 0, 255), (255, 255, 255, 255), lambda button: button.set_text(f"Press M to go to {self.message}"))
+		self.button_play = Button( \
+			BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, \
+			global_font, "Play", (0, 0, 0, 255), (255, 255, 255, 255), \
+			lambda button: scene_manager.scene_push(GameScene("Game")))
+
+		self.button_quit = Button( \
+			BUTTON_X, BUTTON_Y + BUTTON_HEIGHT * 2, BUTTON_WIDTH, BUTTON_HEIGHT, \
+			global_font, "Quit", (0, 0, 0, 255), (255, 255, 255, 255), \
+			lambda button: scene_manager.scene_pop())
 
 	def handle_event(self, event):
 		if event.type == KEYDOWN:
-			if event.key == K_m:
-				self.scene_switch(self.message)
+			pass
 		elif event.type == MOUSEBUTTONDOWN:
 			if event.button == 1:
-				self.button.update()
+				self.button_play.update()
+				self.button_quit.update()
 
 	def update(self, dt):
 		keys = pygame.key.get_pressed()
 
-		if keys[K_w]:
-			self.button.y -= 1 * dt
-		if keys[K_a]:
-			self.button.x -= 1 * dt
-		if keys[K_s]:
-			self.button.y += 1 * dt
-		if keys[K_d]:
-			self.button.x += 1 * dt
-
 	def render(self):
 		width, height = window.surface.get_size()
-		self.background = pygame.transform.scale(self.background, (width, height))
-		window.surface.blit(self.background, (0, 0))
-		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(0, 0, width, 10))
-		self.button.render()
+		surface = pygame.transform.scale(self.background, (width, height))
+		window.surface.blit(surface, (0, 0))
+
+		self.button_quit.render()
+		self.button_play.render()
+
+
+class GameScene(Scene):
+	def __init__(self, name):
+		super().__init__(name, preload=True)
+		if self.preload:
+			self.load()
+
+	def load(self):
+		super().load()
+		self.player = Player(320, 240)
+
+	def start(self):
+		pass
+
+	def handle_event(self, event):
+		pass
+
+	def update(self, dt):
+		self.player.update(dt)
+
+	def render(self):
+		self.player.render()

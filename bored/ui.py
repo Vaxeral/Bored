@@ -23,12 +23,18 @@ class Button:
 			self.callback(self)
 
 	def render(self):
-		#  Renders black text on a white rectangle
-		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(self.x, self.y, self.w, self.h), border_radius=10)
+		width, height = window.surface.get_size()
+
+		rect = pygame.Rect(self.x, self.y, self.w, self.h)
+
+		# rect.centerx = rect.centerx * (width / 640)
+		# rect.centery = rect.centery * (height / 480)
+
+		pygame.draw.rect(window.surface, self.background_color, rect, border_radius=10)
 
 		ANTIALIAS = True #  Makes the text look good
 
-		surface = self.font.render(self.text, ANTIALIAS, (0, 0, 0, 255))
+		surface = self.font.render(self.text, ANTIALIAS, self.foreground_color)
 
 		# width, height = font.size(self.text)
 		width, height = surface.get_size() #  Already have surface might as well use it
