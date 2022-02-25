@@ -11,20 +11,21 @@ from pygame.locals import *
 #  This imports the object instance from window module and renames it to window
 #  This is our global window object used to blit images to the screen
 from window import instance as window
-from scene import Scene, global_clock
+from scene import Scene, Menu, scene_manager, global_clock
 
 class Game:
 	def __init__(self):
 		self.is_running = False
+		scene_manager.scene_push(Menu("MainMenu"))
 
 	#  This is a empty method for now.  We will update our game objects here, such as the Player, Camera and other things.
 	def update(self, dt):
-		pass
+		scene_manager.scene_current_run("update", dt)
 
 	def render(self):
 		window.surface.fill(window.fill)
 		
-		#  Render all UI and game objects
+		scene_manager.scene_current_run("render")
 
 		pygame.display.update()
 
@@ -34,6 +35,8 @@ class Game:
 		elif event.type == KEYDOWN:
 			if event.key == K_a:
 				pygame.display.toggle_fullscreen()
+
+		scene_manager.scene_current_run("handle_event", event)
 
 	def run(self):
 		self.is_running = True
@@ -48,5 +51,6 @@ class Game:
 
 			#  We pass in dt or delta time to update all our objects positions scaled by the delta time.  
 			#  This ensures that objects move at the same rate no matter how fast the main loop ran or in other words how fast your computer is.
+			scene_manager.update()
 			self.update(dt)
 			self.render()
