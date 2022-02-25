@@ -26,6 +26,8 @@ class Player:
 		self.dizzy_counter = 0
 		self.hurt_counter = 0
 		self.hurt = False
+		self.happy = False
+		self.happy_counter = 0
 
 	def update(self, dt):
 		self.time_accumalated += dt
@@ -39,6 +41,11 @@ class Player:
 		if self.hurt_counter > 3000:
 			self.hurt_counter = 0
 			self.hurt = False
+
+		self.happy_counter += dt
+		if self.happy_counter > 3000:
+			self.happy_counter = 0
+			self.happy = False
 
 		self.dizzy_counter += dt
 		if self.dizzy_counter > 3000:
@@ -57,6 +64,7 @@ class Player:
 		if keys[K_d]:
 			self.x += .5 * dt
 		dir_previous = 0
+		mag_previous = 0
 		buttons = pygame.mouse.get_pressed()
 		if buttons[0]:
 			x, y = pygame.mouse.get_pos()
@@ -76,14 +84,17 @@ class Player:
 			mag_lower = 25 * 25
 			dir_lower = math.pi / 8
 			magnitude = dx * dx + dy * dy
+			if abs(magnitude - mag_previous) < 35 * 35:
+				self.happy = True
 			if self.time_accumalated > 10:
 				self.time_accumalated = 0
 				if magnitude < mag_upper and magnitude > mag_lower:
-					print(abs(direction - dir_previous))
+					print(abs(direction - dir_previous)) #  Shouldnt use abs
 					if abs(direction - dir_previous) < dir_lower:
 						self.wiggle_count += 1
 						print(self.wiggle_count)
 			dir_previous = direction
+			mag_previous = magnitude
 		else:
 			self.time_accumalated = 0
 
@@ -106,6 +117,9 @@ class Player:
 		if self.hurt:
 			surface = global_font.render("Hey That Hurt!", True, (0, 0, 0, 255))
 			window.surface.blit(surface, (self.x, self.y))	
-		elif self.dizzy:
-			surface = global_font.render("That Makes Me Dizzy :(", True, (0, 0, 0, 255))
+		# elif self.dizzy:
+		# 	surface = global_font.render("That Makes Me Dizzy. :(", True, (0, 0, 0, 255))
+		# 	window.surface.blit(surface, (self.x, self.y))
+		elif self.happy:
+			surface = global_font.render("Wee! :D", True, (0, 0, 0, 255))
 			window.surface.blit(surface, (self.x, self.y))
