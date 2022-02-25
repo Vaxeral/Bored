@@ -15,13 +15,13 @@ class Player:
 		keys = pygame.key.get_pressed()
 
 		if keys[K_w]:
-			self.y -= 1 * dt
+			self.y -= .5 * dt
 		if keys[K_a]:
-			self.x -= 1 * dt
+			self.x -= .5 * dt
 		if keys[K_s]:
-			self.y += 1 * dt
+			self.y += .5 * dt
 		if keys[K_d]:
-			self.x += 1 * dt
+			self.x += .5 * dt
 
 	def render(self):
 		pygame.draw.rect(window.surface, (255, 0, 0, 255), pygame.Rect(self.x, self.y, self.w, self.h))
