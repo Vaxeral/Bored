@@ -13,6 +13,7 @@ pygame.font.init()
 global_font = pygame.sysfont.SysFont(None, 12)
 
 #  TODO: Support preloading scenes
+#  TODO: Handle screen resizing such that UI and game respond to it
 
 class SceneManager:
 	def __init__(self):
