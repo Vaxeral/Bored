@@ -4,7 +4,13 @@ from pygame.locals import *
 
 from window import instance as window
 
+from ui import Button
+
 global_clock = pygame.time.Clock()
+
+pygame.font.init()
+
+global_font = pygame.sysfont.SysFont(None, 12)
 
 #  TODO: Support preloading scenes
 
@@ -105,6 +111,12 @@ class Menu(Scene):
 	def __init__(self, name, message):
 		super().__init__(name)
 		self.message = message
+		width, height = window.surface.get_size()
+		BUTTON_WIDTH = 80
+		BUTTON_HEIGHT = 20
+		BUTTON_X = width / 2 - BUTTON_WIDTH / 2
+		BUTTON_Y = height / 2 - BUTTON_HEIGHT / 2
+		self.button = Button(BUTTON_X, BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, global_font, "Hello Click Me", (0, 0, 0, 255), (255, 255, 255, 255), lambda button: button.set_text("That Tickles"))
 
 	def init(self):
 		super().init()
@@ -115,10 +127,14 @@ class Menu(Scene):
 		if event.type == KEYDOWN:
 			if event.key == K_m:
 				self.scene_switch("MainMenu")
+		elif event.type == MOUSEBUTTONDOWN:
+			if event.button == 1:
+				self.button.update()
 
 	def update(self, dt):
 		pass
 
 	def render(self):
+		self.button.render()
 		width, height = window.surface.get_size()
 		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(0, 0, width, 10))
