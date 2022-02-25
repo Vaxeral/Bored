@@ -97,6 +97,7 @@ class Scene:
 class Menu(Scene):
 	def init(self):
 		window.fill = (0, 0, 0, 255)
+		print("Initializing Menu Scene")
 
 	def handle_event(self, event):
 		if event.type == KEYDOWN:
@@ -110,4 +111,4 @@ class Menu(Scene):
 
 	def render(self):
 		width, height = window.surface.get_size()
-		pygame.draw.rect(window.surface, (0, 0, 0, 255), pygame.Rect(0, 0, width, 10))
+		pygame.draw.rect(window.surface, (255, 255, 255, 255), pygame.Rect(0, 0, width, 10))

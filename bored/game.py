@@ -21,6 +21,7 @@ class Game:
 	#  This is a empty method for now.  We will update our game objects here, such as the Player, Camera and other things.
 	def update(self, dt):
 		scene_manager.scene_current_run("update", dt)
+		pass
 
 	def render(self):
 		window.surface.fill(window.fill)
@@ -34,7 +35,14 @@ class Game:
 			self.is_running = False
 		elif event.type == KEYDOWN:
 			if event.key == K_a:
-				pygame.display.toggle_fullscreen()
+				if window.fullscreen:
+					info = pygame.display.Info()
+					pygame.display.set_mode((info.current_w, info.current_h), RESIZABLE)
+					window.fullscreen = False
+				else:
+					window.fullscreen = True
+					window.surface = pygame.display.set_mode((0, 0), FULLSCREEN)
+
 
 		scene_manager.scene_current_run("handle_event", event)
 
