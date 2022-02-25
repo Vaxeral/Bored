@@ -28,9 +28,47 @@ class Player:
 		self.hurt = False
 		self.happy = False
 		self.happy_counter = 0
+		self.is_offscreen = False
+		self.offscreen_counter = 0
+		self.go_to_center = False
+		self.angry = False
+		self.angry_counter = 0
 
 	def update(self, dt):
 		self.time_accumalated += dt
+
+		width, height = window.surface.get_size()
+
+		if self.x + self.r > width \
+		or self.x - self.r < 0 \
+		or self.y + self.r > height \
+		or self.y - self.r < 0:
+			self.is_offscreen = True
+		else:
+			self.is_offscreen = False
+
+		if self.is_offscreen:
+			self.go_to_center = True
+
+		if self.go_to_center: self.offscreen_counter += dt
+		else: self.offscreen_counter = 0
+		if self.offscreen_counter > 4000:
+			self.offscreen_counter = 0
+			self.go_to_center = False
+			self.angry = True
+
+		if self.go_to_center:
+			width, height = window.surface.get_size()
+			hw, hh = width / 2, height / 2
+			force = [0, 0]
+			dx = hw - self.x
+			dy = hh - self.y
+			magnitude = .1
+			direction = math.atan2(dy, dx)
+			force[0] = magnitude * math.cos(direction)
+			force[1] = magnitude * math.sin(direction)
+			self.velocity[0] += force[0]
+			self.velocity[1] += force[1]
 
 		if self.n > math.pi * 2:
 			self.n = 0.0
@@ -41,6 +79,13 @@ class Player:
 		if self.hurt_counter > 3000:
 			self.hurt_counter = 0
 			self.hurt = False
+
+
+		if self.angry: self.angry_counter += dt
+		else: self.angry_counter = 0
+		if self.angry_counter > 3000:
+			self.angry_counter = 0
+			self.angry = False
 
 		self.happy_counter += dt
 		if self.happy_counter > 3000:
@@ -89,10 +134,8 @@ class Player:
 			if self.time_accumalated > 10:
 				self.time_accumalated = 0
 				if magnitude < mag_upper and magnitude > mag_lower:
-					print(abs(direction - dir_previous)) #  Shouldnt use abs
 					if abs(direction - dir_previous) < dir_lower:
 						self.wiggle_count += 1
-						print(self.wiggle_count)
 			dir_previous = direction
 			mag_previous = magnitude
 		else:
@@ -122,4 +165,7 @@ class Player:
 		# 	window.surface.blit(surface, (self.x, self.y))
 		elif self.happy:
 			surface = global_font.render("Wee! :D", True, (0, 0, 0, 255))
+			window.surface.blit(surface, (self.x, self.y))
+		elif self.angry:
+			surface = global_font.render("Fuck you!", True, (0, 0, 0, 255))
 			window.surface.blit(surface, (self.x, self.y))
